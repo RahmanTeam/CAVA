@@ -1,0 +1,60 @@
+
+CAVA v1.2.0 README
+==================
+
+1 INTRODUCTION
+--------------
+
+CAVA (Clinical Annotation of VAriants) is a lightweight, fast, flexible and easy-to-use Next Generation Sequencing (NGS) variant annotation tool. It implements a clinical sequencing nomenclature (CSN), a fixed variant annotation consistent with the principles of the Human Genome Variation Society (HGVS) guidelines, optimised for automated clinical variant annotation of NGS data. 
+
+CAVA has been extensively tested on exome data and is being used in the Mainstreaming Cancer Genetics (MCG) programme which applies NGS to increase the availability and affordability of clinical testing of cancer predisposition genes.
+
+
+2 PUBLICATION
+-------------
+
+If you use CAVA, please cite:
+
+Márton Münz, Elise Ruark, Anthony Renwick, Emma Ramsay, Matthew Clarke, Shazia Mahamdallie, Victoria Cloke, Sheila Seal, Ann Strydom, Gerton Lunter, Nazneen Rahman. CSN and CAVA: variant annotation tools for rapid, robust next-generation sequencing analysis in the clinical setting. Genome Medicine 7:76, doi:10.1186/s13073-015-0195-6 (2015).
+
+
+3 DEPENDENCIES
+--------------
+
+CAVA v1.2.0 requires Python version 2.7.x (Python 3 is not supported).
+
+
+4 INSTALLATION
+--------------
+
+CAVA can be downloaded from www.icr.ac.uk/cava
+
+After unpacking the tar.gz file, it can be installed with the following command:
+
+./install.sh
+
+Once the installation script finished successfully, CAVA is ready for use.
+
+ 
+5 RUNNING CAVA
+--------------
+
+CAVA can be run with the following simple command:
+
+/path/to/cava/cava.py -c config.txt -i input.vcf -o output
+
+It requires three command line arguments: 
+the name of the configuration file (-c), the name of the input file (-i) and the prefix of the output file name (-o). 
+
+
+6 DOCUMENTATION
+---------------
+
+See cava-v1.2.0_doc.pdf for detailed documentation and examples!
+
+
+7 LICENCE
+---------
+
+CAVA is released under MIT licence (see the LICENCE file).
+

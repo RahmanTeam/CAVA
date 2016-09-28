@@ -1,0 +1,80 @@
+
+### This is a template of the configuration file for CAVA v1.2.0 ###
+
+# Input file format
+# Possible values: VCF or TXT | Optional: yes | Default value: VCF
+@inputformat = VCF
+
+# Output file format
+# Possible values: VCF or TSV | Optional: yes | Default value: VCF
+@outputformat =  VCF
+
+# Absolute path to reference genome file
+# Possible values: string | Optional: no
+@reference = absolute/path/to/reference/genome
+
+# Absolute path to Ensembl transcript database file
+# Possible values: string | Optional: yes (if not specified, default transcript database will be used)
+@ensembl = absolute/path/to/transcript/database
+
+# Absolute path to dbSNP database file
+# Possible values: string | Optional: yes
+@dbsnp = absolute/path/to/dbsnp/database
+
+# Are variants with neither transcript nor dbSNP annotation to be included in the output?
+# Possible values: TRUE or FALSE | Optional: yes | Default value: TRUE
+@nonannot = TRUE
+
+# Are only records with PASS filter value included in the output?
+# Possible values: TRUE or FALSE | Optional: yes | Default value: FALSE
+@filter = FALSE
+
+# Types of variants to be annotated and outputted
+# Possible values: ALL, SUBSTITUTION, INDEL, INSERTION, DELETION or COMPLEX | Optional: yes | Default value: ALL
+@type = ALL
+
+# Name of compressed BED file specifying genomic regions variant annotation is restricted to
+# Possible values: string | Optional: yes
+@target = .
+
+# Name of file providing a list of the gene identifiers variant annotation is restricted to
+# Note: gene identifiers need to be given on separate lines in the file
+# Possible values: string | Optional: yes  
+@genelist = .
+
+# Name of file providing a list of transcript identifiers variant annotation is restricted to 
+# Note: transcript identifiers need to be given on separate lines in the file
+# Possible values: string | Optional: yes 
+@transcriptlist = .
+
+# Name of file providing a list of the dbSNP identifiers variant annotation is restricted to
+# Note: dbSNP identifiers need to be given on separate lines in the file
+# Possible values: string | Optional: yes  
+@snplist = .
+
+# Is a log file to be written?
+# Possible values: TRUE or FALSE | Optional: yes | Default value: FALSE
+@logfile = FALSE
+
+# Which ontology is used for reporting consequence type?
+# Possible values: CLASS, SO or BOTH | Optional: yes | Default value: BOTH
+@ontology = BOTH
+
+# Definition of variant impact levels (reported by the IMPACT annotation flag)
+# Different impact levels are separated by | and a comma-separated list of CLASS terms must be given for each level 
+# Possible values: string | Optional: yes
+# Default value: SG,ESS,FS | SS5,IM,SL,EE,IF,NSY | SY,SS,INT,5PU,3PU
+@impactdef = SG,ESS,FS | SS5,IM,SL,EE,IF,NSY | SY,SS,INT,5PU,3PU
+
+# Are alternative annotations outputted?
+# If TRUE, the ALTANN and ALTCLASS/ALTSO annotation flags are reported instead of the ALTFLAG flag
+# Possible values: TRUE or FALSE | Optional: yes | Default value: TRUE
+@givealt = TRUE
+
+# Number of bases into the intron used as the splice site region 
+# Possible values: integer >= 6 | Optional: yes | Default value: 8
+@ssrange = 8
+
+# Is the prefix CAVA_ added to annotation flag names in VCF output?
+# Possible values: TRUE or FALSE | Optional: yes | Default value: FALSE
+@prefix = FALSE
