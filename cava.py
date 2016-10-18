@@ -219,11 +219,19 @@ class SingleJob(multiprocessing.Process):
         # Total number of records in the input file
         self.numOfRecords = numOfRecords
 
-        # Allowed chromosomes
-        self.chroms = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17',
-                       '18', '19', '20', '21', '22', 'X', 'Y', 'MT']
-
-        # Input file
+        # Get Allowed chromosomes from config or use default
+        chroms = None
+        with open(copts.conf) as c:
+		    for line in c:
+			    if line.startswith('@chrom'):
+				    chroms = line[line.find('=') + 1:].strip().split(',')
+                    self.chroms=chroms
+        if self.chroms[0] == '.':
+		    self.chroms = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', 'X', 'Y', 'MT']
+			
+        print self.chroms
+        sys.exit()
+		# Input file
         if copts.input.endswith('.gz'):
             self.infile = gzip.open(copts.input, 'r')
         else:
