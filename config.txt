@@ -11,11 +11,11 @@
 
 # Absolute path to reference genome file
 # Possible values: string | Optional: no
-@reference = /data2/bsi/reference/sequence/human/ncbi/37.1/allchr.fa
+@reference = absolute/path/to/reference/genome
 
 # Absolute path to Ensembl transcript database file
 # Possible values: string | Optional: yes (if not specified, default transcript database will be used)
-@ensembl = /data5/bsi/epibreast/m087494.couch/Scripts/Progams/CAVA/defaultdb/ensembl75s.gz
+@ensembl = absolute/path/to/transcript/database
 
 # Absolute path to dbSNP database file
 # Possible values: string | Optional: yes
