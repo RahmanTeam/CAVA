@@ -19,7 +19,7 @@
 
 # Absolute path to dbSNP database file
 # Possible values: string | Optional: yes
-@dbsnp = .
+@dbsnp = absolute/path/to/dbsnp/database
 
 # Are variants with neither transcript nor dbSNP annotation to be included in the output?
 # Possible values: TRUE or FALSE | Optional: yes | Default value: TRUE
@@ -39,17 +39,17 @@
 
 # Name of file providing a list of the gene identifiers variant annotation is restricted to
 # Note: gene identifiers need to be given on separate lines in the file
-# Possible values: string | Optional: yes  
+# Possible values: string | Optional: yes
 @genelist = .
 
-# Name of file providing a list of transcript identifiers variant annotation is restricted to 
+# Name of file providing a list of transcript identifiers variant annotation is restricted to
 # Note: transcript identifiers need to be given on separate lines in the file
-# Possible values: string | Optional: yes 
+# Possible values: string | Optional: yes
 @transcriptlist = .
 
 # Name of file providing a list of the dbSNP identifiers variant annotation is restricted to
 # Note: dbSNP identifiers need to be given on separate lines in the file
-# Possible values: string | Optional: yes  
+# Possible values: string | Optional: yes
 @snplist = .
 
 # Is a log file to be written?
@@ -61,7 +61,7 @@
 @ontology = BOTH
 
 # Definition of variant impact levels (reported by the IMPACT annotation flag)
-# Different impact levels are separated by | and a comma-separated list of CLASS terms must be given for each level 
+# Different impact levels are separated by | and a comma-separated list of CLASS terms must be given for each level
 # Possible values: string | Optional: yes
 # Default value: SG,ESS,FS | SS5,IM,SL,EE,IF,NSY | SY,SS,INT,5PU,3PU
 @impactdef = SG,ESS,FS | SS5,IM,SL,EE,IF,NSY | SY,SS,INT,5PU,3PU
@@ -71,23 +71,15 @@
 # Possible values: TRUE or FALSE | Optional: yes | Default value: TRUE
 @givealt = TRUE
 
-# Number of bases into the intron used as the splice site region 
+# Number of bases into the intron used as the splice site region
 # Possible values: integer >= 6 | Optional: yes | Default value: 8
 @ssrange = 8
+
+# Name of chromosomes considered
+# Possible values: string (comma-separated chromosome names) | Optional: yes
+# Default value: 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,18,20,21,22,X,Y,MT
+@chrom = 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,18,20,21,22,X,Y,MT
 
 # Is the prefix CAVA_ added to annotation flag names in VCF output?
 # Possible values: TRUE or FALSE | Optional: yes | Default value: FALSE
 @prefix = TRUE
-
-# Name of chromosomes you want to run on
-# Default = 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,18,20,21,22,X,Y,MT
-@chrom = .
-
-# Which Codon table should be used?
-# 1 = {'ATA': 'I'}   This is the default
-# 3 = {'ATA': 'Ile'} This uses the 3 letter code instead
-# 4 = {'AGA':'X'} Mitochondrial Code: changes RAGAX, RAGGX, IAUAM, XUGAW (used if chr == M or MT)
-# 5 = {'ATA': 'I'} Bacterial code
-# Default = 1
-@codon_usage = 4
-

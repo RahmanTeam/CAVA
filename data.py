@@ -18,7 +18,7 @@ import pysam
 # Class representing the Ensembl (transcript) dataset
 class Ensembl(object):
     # Constructor
-    def __init__(self, options, genelist, transcriptlist, codon_usage):
+    def __init__(self, options, genelist, transcriptlist):
         self.options = options
         # Openning tabix file representing the Ensembl database
         self.tabixfile = pysam.Tabixfile(options.args['ensembl'])
@@ -26,7 +26,6 @@ class Ensembl(object):
         self.exonSeqs = dict()
         self.genelist = genelist
         self.transcriptlist = transcriptlist
-        self.codon_usage = codon_usage
 
     # Find transcripts overlapping with a variant
     def findTranscripts(self, variant, strand, reference):
@@ -299,7 +298,7 @@ class Ensembl(object):
                 protein = ''
             else:
                 if not transcript.TRANSCRIPT in self.proteinSeqs.keys():
-                    protein, exonseqs = transcript.getProteinSequence(reference, None, None, self.codon_usage)
+                    protein, exonseqs = transcript.getProteinSequence(reference, None, None)
 
                     if len(self.proteinSeqs) > 5:
                         self.proteinSeqs = dict()
@@ -314,13 +313,13 @@ class Ensembl(object):
             if notexonic_plus:
                 mutprotein_plus = ''
             else:
-                mutprotein_plus, exonseqs = transcript.getProteinSequence(reference, variant_plus, exonseqs, self.codon_usage)
+                mutprotein_plus, exonseqs = transcript.getProteinSequence(reference, variant_plus, exonseqs)
 
             if difference:
                 if notexonic_minus:
                     mutprotein_minus = ''
                 else:
-                    mutprotein_minus, exonseqs = transcript.getProteinSequence(reference, variant_minus, exonseqs, self.codon_usage)
+                    mutprotein_minus, exonseqs = transcript.getProteinSequence(reference, variant_minus, exonseqs)
             else:
                 mutprotein_minus = mutprotein_plus
 

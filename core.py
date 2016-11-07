@@ -6,7 +6,7 @@
 
 
 from __future__ import division
-import os, sys
+import os
 import logging
 import gzip
 import time
@@ -448,17 +448,11 @@ class Transcript(object):
             return ret, exonseqs
 
     # Getting the translated protein sequence of the transcript
-    def getProteinSequence(self, reference, variant, exonseqs, codon_usage):
+    def getProteinSequence(self, reference, variant, exonseqs):
         # Translating coding sequence
-        codon_usage = codon_usage
         codingsequence, exonseqa = self.getCodingSequence(reference, variant, exonseqs)
-        if (self.chrom == 'chrM' or 
-            self.chrom == 'chrMT' or 
-            self.chrom == 'M' or 
-            self.chrom == 'MT'):
-            ret = Sequence(codingsequence).translate('4')
-        else:
-            ret = Sequence(codingsequence).translate(codon_usage)
+        if self.chrom in ['chrM', 'chrMT', 'M', 'MT']: ret = Sequence(codingsequence).translate(code='mitochondrial')
+        else: ret = Sequence(codingsequence).translate()
         return ret, exonseqa
 
     # Checking if a given position is outside the region between the start and stop codon
@@ -641,9 +635,8 @@ class Exon(object):
 # Class representing a DNA sequence
 class Sequence(str):
     # Translating to amino acid sequence
-    def translate(self, letter):
-        gencode = {}
-        if letter == '1':
+    def translate(self, code = 'standard'):
+        if code == 'standard':
             gencode = {
                 'ATA': 'I', 'ATC': 'I', 'ATT': 'I', 'ATG': 'M',
                 'ACA': 'T', 'ACC': 'T', 'ACG': 'T', 'ACT': 'T',
@@ -661,25 +654,7 @@ class Sequence(str):
                 'TTC': 'F', 'TTT': 'F', 'TTA': 'L', 'TTG': 'L',
                 'TAC': 'Y', 'TAT': 'Y', 'TAA': 'X', 'TAG': 'X',
                 'TGC': 'C', 'TGT': 'C', 'TGA': 'X', 'TGG': 'W'}
-        if letter == '3':
-            gencode = {
-                'ATA': 'Ile', 'ATC': 'Ile', 'ATT': 'Ile', 'ATG': 'Met',
-                'ACA': 'Thr', 'ACC': 'Thr', 'ACG': 'Thr', 'ACT': 'Thr',
-                'AAC': 'Asn', 'AAT': 'Asn', 'AAA': 'Lys', 'AAG': 'Lys',
-                'AGC': 'Ser', 'AGT': 'Ser', 'AGA': 'Arg', 'AGG': 'Arg',
-                'CTA': 'Leu', 'CTC': 'Leu', 'CTG': 'Leu', 'CTT': 'Leu',
-                'CCA': 'Pro', 'CCC': 'Pro', 'CCG': 'Pro', 'CCT': 'Pro',
-                'CAC': 'His', 'CAT': 'His', 'CAA': 'Gln', 'CAG': 'Gln',
-                'CGA': 'Arg', 'CGC': 'Arg', 'CGG': 'Arg', 'CGT': 'Arg',
-                'GTA': 'Val', 'GTC': 'Val', 'GTG': 'Val', 'GTT': 'Val',
-                'GCA': 'Ala', 'GCC': 'Ala', 'GCG': 'Ala', 'GCT': 'Ala',
-                'GAC': 'Asp', 'GAT': 'Asp', 'GAA': 'Glu', 'GAG': 'Glu',
-                'GGA': 'Gly', 'GGC': 'Gly', 'GGG': 'Gly', 'GGT': 'Gly',
-                'TCA': 'Ser', 'TCC': 'Ser', 'TCG': 'Ser', 'TCT': 'Ser',
-                'TTC': 'Phe', 'TTT': 'Phe', 'TTA': 'Leu', 'TTG': 'Leu',
-                'TAC': 'Tyr', 'TAT': 'Tyr', 'TAA': 'X', 'TAG': 'X',
-                'TGC': 'Cys', 'TGT': 'Cys', 'TGA': 'X', 'TGG': 'Trp'}
-        if letter == '4':
+        elif code == 'mitochondrial':
             gencode = {
                 'ATA': 'M', 'ATC': 'I', 'ATT': 'I', 'ATG': 'M',
                 'ACA': 'T', 'ACC': 'T', 'ACG': 'T', 'ACT': 'T',
@@ -697,24 +672,6 @@ class Sequence(str):
                 'TTC': 'F', 'TTT': 'F', 'TTA': 'L', 'TTG': 'L',
                 'TAC': 'Y', 'TAT': 'Y', 'TAA': 'X', 'TAG': 'X',
                 'TGC': 'C', 'TGT': 'C', 'TGA': 'W', 'TGG': 'W'}
-        if letter == '5':
-            gencode = {
-			    'AAA': 'K', 'AAC': 'N', 'AAG': 'K', 'AAT': 'N',
-                'ACA': 'T', 'ACC': 'T', 'ACG': 'T', 'ACT': 'T',
-                'AGA': 'R', 'AGC': 'S', 'AGG': 'R', 'AGT': 'S',
-                'ATA': 'I', 'ATC': 'I', 'ATG': 'M', 'ATT': 'I',
-                'CAA': 'Q', 'CAC': 'H', 'CAG': 'Q', 'CAT': 'H',
-                'CCA': 'P', 'CCC': 'P', 'CCG': 'P', 'CCT': 'P',
-                'CGA': 'R', 'CGC': 'R', 'CGG': 'R', 'CGT': 'R',
-                'CTA': 'L', 'CTC': 'L', 'CTG': 'L', 'CTT': 'L',
-                'GAA': 'E', 'GAC': 'D', 'GAG': 'E', 'GAT': 'D',
-                'GCA': 'A', 'GCC': 'A', 'GCG': 'A', 'GCT': 'A',
-                'GGA': 'G', 'GGC': 'G', 'GGG': 'G', 'GGT': 'G',
-                'GTA': 'V', 'GTC': 'V', 'GTG': 'V', 'GTT': 'V',
-                'TAA': 'X', 'TAC': 'Y', 'TAG': 'X', 'TAT': 'Y',
-                'TCA': 'S', 'TCC': 'S', 'TCG': 'S', 'TCT': 'S',
-                'TGA': 'X', 'TGC': 'C', 'TGG': 'W', 'TGT': 'C',
-                'TTA': 'L', 'TTC': 'F', 'TTG': 'L', 'TTT': 'F'}
         ret = ''
         index = 0
         while index + 3 <= len(self):
@@ -765,7 +722,7 @@ class Options(object):
         self.defs['ontology'] = ('string', 'both')
         self.defs['impactdef'] = ('string', 'SG,ESS,FS|SS5,IM,SL,EE,IF,NSY|SY,SS,INT,5PU,3PU')
         self.defs['prefix'] = ('boolean', False)
-        self.defs['codon_usage'] = ('string', '1')
+        self.defs['chrom'] = ('string', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,18,20,21,22,X,Y,MT')
 
         # Reading options from file
         self.read()

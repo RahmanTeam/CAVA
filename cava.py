@@ -219,17 +219,10 @@ class SingleJob(multiprocessing.Process):
         # Total number of records in the input file
         self.numOfRecords = numOfRecords
 
-        # Get Allowed chromosomes from config or use default
-        chroms = None
-        with open(copts.conf) as c:
-		    for line in c:
-			    if line.startswith('@chrom'):
-				    chroms = line[line.find('=') + 1:].strip().split(',')
-                    self.chroms=chroms
-        if self.chroms[0] == '.':
-		    self.chroms = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', 'X', 'Y', 'MT']
-			
-		# Input file
+        # Allowed chromosomes
+        self.chroms = options.args['chrom'].strip().split(',')
+
+        # Input file
         if copts.input.endswith('.gz'):
             self.infile = gzip.open(copts.input, 'r')
         else:
@@ -250,16 +243,8 @@ class SingleJob(multiprocessing.Process):
             self.outfile = open(outfn, 'a')
 
         # Ensembl, dbSNP databases
-        # Get Allowed chromosomes from config or use default
-        codon_usage = ['1']
-        with open(copts.conf) as c:
-		    for line in c:
-			    if line.startswith('@codon_usage'):
-				    codon_usage = line[line.find('=') + 1:].strip().split(',')
-                    self.codon_usage=codon_usage
-
         if (not options.args['ensembl'] == '.') and (not options.args['ensembl'] == ''):
-            self.ensembl = Ensembl(options, genelist, transcriptlist, codon_usage[0] )
+            self.ensembl = Ensembl(options, genelist, transcriptlist)
             if options.args['logfile'] and threadidx == 1: logging.info('Connected to Ensembl database.')
         else:
             self.ensembl = None
@@ -315,9 +300,7 @@ class SingleJob(multiprocessing.Process):
             if self.options.args['filter'] and not record.filter == 'PASS': continue
 
             # Only include records of allowed chromosome names
-            if record.chrom not in self.chroms: 
-                logging.warn("\n####################################\t\t!!!!!!Chromosome " + record.chrom + " not found, skipping!!!!!!\n")
-                continue
+            if record.chrom not in self.chroms: continue
 
             # Annotating the record based on the Ensembl, dbSNP and reference data
             record.annotate(self.ensembl, self.dbsnp, self.reference, self.impactdir)
