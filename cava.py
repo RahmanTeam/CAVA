@@ -326,7 +326,7 @@ class SingleJob(multiprocessing.Process):
 
 ###########################################################################################################################################
 
-ver = 'v1.2.0'
+ver = 'v1.2.1'
 
 # Read default configuration file name from the default_config_path file
 default_config_file = defaultConfigPath()

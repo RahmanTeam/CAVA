@@ -168,7 +168,13 @@ class Record(object):
         if options.args['inputformat'].upper() == 'VCF':
             cols = line.strip().split("\t")
             self.chrom = cols[0]
-            if self.chrom.startswith('chr'): self.chrom = self.chrom[3:]
+
+            if self.chrom.startswith('chr'):
+                self.chrom_chr_prefix = True
+                self.chrom = self.chrom[3:]
+            else:
+                self.chrom_chr_prefix = False
+
             self.pos = int(cols[1])
             self.id = cols[2]
             self.ref = cols[3]
@@ -301,6 +307,9 @@ class Record(object):
             # Creating first part of the VCF record (up to FILTER field)
             record = self.chrom + '\t' + str(self.pos) + '\t' + self.id + '\t' + self.ref + '\t' + ",".join(
                 outalts) + '\t' + self.qual + '\t' + self.filter + '\t'
+
+            if self.chrom_chr_prefix:
+                record = 'chr' + record
 
             # Preparing components of the String to be added to the INFO field
             flags = []
@@ -772,24 +781,24 @@ def writeHeader(options, header, outfile, stdout):
 
     if options.args['prefix']: prefix = 'CAVA_'
     else: prefix = ''
-    headerinfo = '##INFO=<ID='+prefix+'TYPE,Number=.,Type=String,Description=\"Variant type: Substitution, Insertion, Deletion or Complex\",Source=\"CAVA\",Version=\"1.2.0\">\n'
-    headerinfo += '##INFO=<ID='+prefix+'GENE,Number=.,Type=String,Description=\"HGNC gene symbol\",Source=\"CAVA\",Version=\"1.2.0\">\n'
-    headerinfo += '##INFO=<ID='+prefix+'TRANSCRIPT,Number=.,Type=String,Description=\"Transcript identifier\",Source=\"CAVA\",Version=\"1.2.0\">\n'
-    headerinfo += '##INFO=<ID='+prefix+'GENEID,Number=.,Type=String,Description=\"Gene identifier\",Source=\"CAVA\",Version=\"1.2.0\">\n'
-    headerinfo += '##INFO=<ID='+prefix+'TRINFO,Number=.,Type=String,Description=\"Transcript information: Strand/Length of transcript/Number of exons/Length of coding DNA + UTR/Protein length\",Source=\"CAVA\",Version=\"1.2.0\">\n'
-    headerinfo += '##INFO=<ID='+prefix+'LOC,Number=.,Type=String,Description=\"Location of variant in transcript\",Source=\"CAVA\",Version=\"1.2.0\">\n'
-    headerinfo += '##INFO=<ID='+prefix+'CSN,Number=.,Type=String,Description=\"CSN annotation\",Source=\"CAVA\",Version=\"1.2.0\">\n'
-    headerinfo += '##INFO=<ID='+prefix+'PROTPOS,Number=.,Type=String,Description=\"Protein position\",Source=\"CAVA\",Version=\"1.2.0\">\n'
-    headerinfo += '##INFO=<ID='+prefix+'PROTREF,Number=.,Type=String,Description=\"Reference amino acids\",Source=\"CAVA\",Version=\"1.2.0\">\n'
-    headerinfo += '##INFO=<ID='+prefix+'PROTALT,Number=.,Type=String,Description=\"Alternate amino acids\",Source=\"CAVA\",Version=\"1.2.0\">\n'
-    headerinfo += '##INFO=<ID='+prefix+'CLASS,Number=.,Type=String,Description=\"5PU: Variant in 5 prime untranslated region, 3PU: Variant in 3 prime untranslated region, INT: Intronic variant that does not alter splice site bases, SS: Intronic variant that alters a splice site base but not an ESS or SS5 base, ESS: Variant that alters essential splice site base (+1,+2,-1,-2), SS5: Variant that alters the +5 splice site base, but not an ESS base, SY: Synonymous change caused by a base substitution (i.e. does not alter amino acid), NSY: Nonsynonymous change (missense) caused by a base substitution (i.e. alters amino acid), IF: Inframe insertion and/or deletion (variant alters the length of coding sequence but not the frame), IM: Variant that alters the start codon, SG: Variant resulting in stop-gain (nonsense) mutation, SL: Variant resulting in stop-loss mutation, FS: Frameshifting insertion and/or deletion (variant alters the length and frame of coding sequence), EE: Inframe deletion, insertion or base substitution which affects the first or last three bases of the exon\",Source=\"CAVA\",Version=\"1.2.0\">\n'
-    headerinfo += '##INFO=<ID='+prefix+'SO,Number=.,Type=String,Description=\"Sequence Ontology term\",Source=\"CAVA\",Version=\"1.2.0\">\n'
-    headerinfo += '##INFO=<ID='+prefix+'ALTFLAG,Number=.,Type=String,Description=\"None: variant has the same CSN annotation regardless of its left or right-alignment, AnnNotClass/AnnNotSO/AnnNotClassNotSO: indel has an alternative CSN but the same CLASS and/or SO, AnnAndClass/AnnAndSO/AnnAndClassNotSO/AnnAndSONotClass/AnnAndClassAndSO: Multiple CSN with different CLASS and/or SO annotations\",Source=\"CAVA\",Version=\"1.2.0\">\n'
-    headerinfo += '##INFO=<ID='+prefix+'ALTANN,Number=.,Type=String,Description=\"Alternate CSN annotation\",Source=\"CAVA\",Version=\"1.2.0\">\n'
-    headerinfo += '##INFO=<ID='+prefix+'ALTCLASS,Number=.,Type=String,Description=\"Alternate CLASS annotation\",Source=\"CAVA\",Version=\"1.2.0\">\n'
-    headerinfo += '##INFO=<ID='+prefix+'ALTSO,Number=.,Type=String,Description=\"Alternate SO annotation\",Source=\"CAVA\",Version=\"1.2.0\">\n'
-    headerinfo += '##INFO=<ID='+prefix+'IMPACT,Number=.,Type=String,Description=\"Impact group the variant is stratified into\",Source=\"CAVA\",Version=\"1.2.0\">\n'
-    headerinfo += '##INFO=<ID='+prefix+'DBSNP,Number=.,Type=String,Description=\"rsID from dbSNP\",Source=\"CAVA\",Version=\"1.2.0\">\n'
+    headerinfo = '##INFO=<ID='+prefix+'TYPE,Number=.,Type=String,Description=\"Variant type: Substitution, Insertion, Deletion or Complex\",Source=\"CAVA\",Version=\"1.2.1\">\n'
+    headerinfo += '##INFO=<ID='+prefix+'GENE,Number=.,Type=String,Description=\"HGNC gene symbol\",Source=\"CAVA\",Version=\"1.2.1\">\n'
+    headerinfo += '##INFO=<ID='+prefix+'TRANSCRIPT,Number=.,Type=String,Description=\"Transcript identifier\",Source=\"CAVA\",Version=\"1.2.1\">\n'
+    headerinfo += '##INFO=<ID='+prefix+'GENEID,Number=.,Type=String,Description=\"Gene identifier\",Source=\"CAVA\",Version=\"1.2.1\">\n'
+    headerinfo += '##INFO=<ID='+prefix+'TRINFO,Number=.,Type=String,Description=\"Transcript information: Strand/Length of transcript/Number of exons/Length of coding DNA + UTR/Protein length\",Source=\"CAVA\",Version=\"1.2.1\">\n'
+    headerinfo += '##INFO=<ID='+prefix+'LOC,Number=.,Type=String,Description=\"Location of variant in transcript\",Source=\"CAVA\",Version=\"1.2.1\">\n'
+    headerinfo += '##INFO=<ID='+prefix+'CSN,Number=.,Type=String,Description=\"CSN annotation\",Source=\"CAVA\",Version=\"1.2.1\">\n'
+    headerinfo += '##INFO=<ID='+prefix+'PROTPOS,Number=.,Type=String,Description=\"Protein position\",Source=\"CAVA\",Version=\"1.2.1\">\n'
+    headerinfo += '##INFO=<ID='+prefix+'PROTREF,Number=.,Type=String,Description=\"Reference amino acids\",Source=\"CAVA\",Version=\"1.2.1\">\n'
+    headerinfo += '##INFO=<ID='+prefix+'PROTALT,Number=.,Type=String,Description=\"Alternate amino acids\",Source=\"CAVA\",Version=\"1.2.1\">\n'
+    headerinfo += '##INFO=<ID='+prefix+'CLASS,Number=.,Type=String,Description=\"5PU: Variant in 5 prime untranslated region, 3PU: Variant in 3 prime untranslated region, INT: Intronic variant that does not alter splice site bases, SS: Intronic variant that alters a splice site base but not an ESS or SS5 base, ESS: Variant that alters essential splice site base (+1,+2,-1,-2), SS5: Variant that alters the +5 splice site base, but not an ESS base, SY: Synonymous change caused by a base substitution (i.e. does not alter amino acid), NSY: Nonsynonymous change (missense) caused by a base substitution (i.e. alters amino acid), IF: Inframe insertion and/or deletion (variant alters the length of coding sequence but not the frame), IM: Variant that alters the start codon, SG: Variant resulting in stop-gain (nonsense) mutation, SL: Variant resulting in stop-loss mutation, FS: Frameshifting insertion and/or deletion (variant alters the length and frame of coding sequence), EE: Inframe deletion, insertion or base substitution which affects the first or last three bases of the exon\",Source=\"CAVA\",Version=\"1.2.1\">\n'
+    headerinfo += '##INFO=<ID='+prefix+'SO,Number=.,Type=String,Description=\"Sequence Ontology term\",Source=\"CAVA\",Version=\"1.2.1\">\n'
+    headerinfo += '##INFO=<ID='+prefix+'ALTFLAG,Number=.,Type=String,Description=\"None: variant has the same CSN annotation regardless of its left or right-alignment, AnnNotClass/AnnNotSO/AnnNotClassNotSO: indel has an alternative CSN but the same CLASS and/or SO, AnnAndClass/AnnAndSO/AnnAndClassNotSO/AnnAndSONotClass/AnnAndClassAndSO: Multiple CSN with different CLASS and/or SO annotations\",Source=\"CAVA\",Version=\"1.2.1\">\n'
+    headerinfo += '##INFO=<ID='+prefix+'ALTANN,Number=.,Type=String,Description=\"Alternate CSN annotation\",Source=\"CAVA\",Version=\"1.2.1\">\n'
+    headerinfo += '##INFO=<ID='+prefix+'ALTCLASS,Number=.,Type=String,Description=\"Alternate CLASS annotation\",Source=\"CAVA\",Version=\"1.2.1\">\n'
+    headerinfo += '##INFO=<ID='+prefix+'ALTSO,Number=.,Type=String,Description=\"Alternate SO annotation\",Source=\"CAVA\",Version=\"1.2.1\">\n'
+    headerinfo += '##INFO=<ID='+prefix+'IMPACT,Number=.,Type=String,Description=\"Impact group the variant is stratified into\",Source=\"CAVA\",Version=\"1.2.1\">\n'
+    headerinfo += '##INFO=<ID='+prefix+'DBSNP,Number=.,Type=String,Description=\"rsID from dbSNP\",Source=\"CAVA\",Version=\"1.2.1\">\n'
 
     dateline = '##fileDate='+time.strftime("%Y-%m-%d")
 

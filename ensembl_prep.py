@@ -495,7 +495,7 @@ def is_number(s):
 if __name__ == '__main__':
 
     # Version number
-    ver = 'v1.2.0'
+    ver = 'v1.2.1'
 
     # Command line argument parsing
     descr = 'ensembl_prep '+ver+' is a simple tool for generating the local Ensembl transcript database file used by CAVA (via the @ensembl option flag).'
