@@ -1,5 +1,5 @@
 
-CAVA v1.2.1 README
+CAVA v1.2.2 README
 ==================
 
 1 INTRODUCTION
@@ -21,7 +21,7 @@ Márton Münz, Elise Ruark, Anthony Renwick, Emma Ramsay, Matthew Clarke, Shazia
 3 DEPENDENCIES
 --------------
 
-CAVA v1.2.1 requires Python version 2.7.x (Python 3 is not supported).
+CAVA v1.2.2 requires Python version 2.7.x (Python 3 is not supported).
 
 
 4 INSTALLATION

@@ -116,7 +116,7 @@ def printMetaData(datafile):
 if __name__ == '__main__':
 
     # Version number
-    ver = 'v1.2.1'
+    ver = 'v1.2.2'
 
     # Command line argument parsing
     descr = 'dbSNP database preparation tool (dbsnp_prep) for CAVA '+ver

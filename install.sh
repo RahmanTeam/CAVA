@@ -6,14 +6,14 @@ echo "$1"
 printf '%.0s=' {1..80}; echo; echo
 }
 
-ver="v1.2.1"
+ver="v1.2.2"
 
 # Retrieving CAVA directory and Python version
 dir=$(pwd)
 pver=$(python -c "import sys; print sys.version[:3]")
 
 if [ $pver != '2.7' ]; then
-	echo; echo "CAVA v1.2.1 requires Python 2.7.x"; echo
+	echo; echo "CAVA v1.2.2 requires Python 2.7.x"; echo
 	exit
 fi
 
