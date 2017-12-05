@@ -1,0 +1,5 @@
+#!/bin/bash
+unset PYTHONPATH
+ABSOLUTE_PATH=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+source $ABSOLUTE_PATH/activate
+$ABSOLUTE_PATH/CAVA.py $*

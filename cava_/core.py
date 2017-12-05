@@ -736,7 +736,9 @@ class Options(object):
         self.read()
 
         if (self.args['ensembl'] == '.' or self.args['ensembl'] == ''):
-            self.args['ensembl'] = os.path.dirname(os.path.realpath(__file__)) + '/defaultdb/ensembl75s.gz'
+            d = os.path.dirname(os.path.realpath(__file__))
+            dir = d[:d.rfind('env/lib')]
+            self.args['ensembl'] = dir + '/defaultdb/ensembl75s.gz'
 
 
     # Reading options from configuration file

@@ -1,35 +1,12 @@
-#!/usr/bin/env python
-
-
-# Transcript database preparation tool (ensembl_prep)
-#######################################################################################################################
-
-# Basic imports
 from __future__ import division
 import os
-import sys
-import gzip
 import datetime
-from optparse import OptionParser
-from operator import itemgetter
+import sys
 import urllib
-
-if sys.version_info[0] == 3:
-    print '\nCAVA does not run on Python 3.\n'
-    quit()
-
-# Checking if installation is complete
-if not os.path.isfile(os.path.dirname(os.path.realpath(__file__))+"/pysamdir/pysam/Pileup.py"):
-    print '\nCAVA installation not complete.'
-    print 'Please run install.sh in the cava directory.\n'
-    quit()
-
-# Pysam import
-sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)) + '/pysamdir')
+import gzip
 import pysam
+from operator import itemgetter
 
-
-#######################################################################################################################
 
 # Class representing a transcript
 class Transcript(object):
@@ -259,12 +236,12 @@ def readRecords(inputfn):
 
 
 # Process Ensembl data
-def run(ver, options, genome_build):
+def process_data(options, genome_build, version):
 
     # Read manually selected MCG transcripts from file
-    dir = os.path.dirname(os.path.realpath(sys.argv[0]))
+    datadir = os.path.dirname(os.path.realpath(__file__)) + '/data'
     mcg_transcripts=dict()
-    for line in open(dir+'/ensembl_prep/MCG_transcripts.txt'):
+    for line in open(datadir+'/MCG_transcripts.txt'):
         line = line.strip()
         if line == '': continue
         cols = line.split('\t')
@@ -293,7 +270,8 @@ def run(ver, options, genome_build):
     # Load candidate and CCDS data for Ensembl <75
     candidates = dict()
     if int(options.ensembl) < 75:
-        for line in open(dir+'/ensembl_prep/info'+options.ensembl+'.txt'):
+        datadir = os.path.dirname(os.path.realpath(__file__)) + '/data'
+        for line in open(datadir+'/info'+options.ensembl+'.txt'):
             line=line.strip()
             if line=='': continue
             cols = line.split('\t')
@@ -426,7 +404,7 @@ def run(ver, options, genome_build):
 
     # Initialize output list file if needed
     outfile_list = open(options.output+'.txt','w')
-    outfile_list.write('# Created by ensembl_prep '+ver+' based on Ensembl release '+options.ensembl+' (genome build '+genome_build+')\n')
+    outfile_list.write('# Created by CAVA ensembl_db '+version+' based on Ensembl release '+options.ensembl+' (genome build '+genome_build+')\n')
     outfile_list.write('ENSG\tGENE\tENST\n')
 
     # Output transcripts of each gene
@@ -469,7 +447,7 @@ def run(ver, options, genome_build):
     return len(sortedRecords)
 
 
-# Use Tabix to index output file     
+# Use Tabix to index output file
 def indexFile(options):
     sys.stdout.write('Compressing output file... ')
     sys.stdout.flush()
@@ -490,26 +468,8 @@ def is_number(s):
         return False
 
 
-#######################################################################################################################
 
-if __name__ == '__main__':
-
-    # Version number
-    ver = 'v1.2.2'
-
-    # Command line argument parsing
-    descr = 'ensembl_prep '+ver+' is a simple tool for generating the local Ensembl transcript database file used by CAVA (via the @ensembl option flag).'
-    epilog = '\nExample usage: ./ensembl_prep.py -i input.txt -e 70 -o out -s\n\n'
-    OptionParser.format_epilog = lambda self, formatter: self.epilog
-    parser = OptionParser(usage='python path/to/cava/ensembl_prep.py <options>', version=ver, description=descr,epilog=epilog)
-    parser.add_option('-i', "--in", default=None, dest='input', action='store',help="Input filename (list of ENST IDs)")
-    parser.add_option('-o', "--out", default=None, dest='output', action='store', help="Output filename prefix")
-    parser.add_option('-e', "--ens", default=None, dest='ensembl', action='store', help="Ensembl release version")
-    #parser.add_option('-g', "--genome", dest='genome', action='store', default='GRCh37',help="Human genome reference version (default: %default)")
-    parser.add_option('-s', "--select", default=False, dest='select', action='store_true',help="Select transcript for each gene [default: %default]")
-
-    (options, args) = parser.parse_args()
-
+def run(options, version):
     # Checking if all required options specified
     if options.ensembl is None:
         print '\nError: no Ensembl release specified. Use option -h to get help!\n'
@@ -522,7 +482,7 @@ if __name__ == '__main__':
         quit()
 
     # Must use Ensembl release >= 70
-    if not (int(options.ensembl) >= 70 or int(options.ensembl) == 65) :
+    if not (int(options.ensembl) >= 70 or int(options.ensembl) == 65):
         print '\nError: This version works with Ensembl v65 or >= v70.\n'
         quit()
 
@@ -530,9 +490,9 @@ if __name__ == '__main__':
     # genome_build = options.genome
     genome_build = 'GRCh37' if int(options.ensembl) <= 75 else 'GRCh38'
 
-    # Printing out version information  
+    # Printing out version information
     print "\n---------------------------------------------------------------------------------------"
-    print 'CAVA ' + ver + ' transcript database preparation tool (ensembl_prep) is now running'
+    print 'CAVA ' + version + ' transcript database preparation tool (ensembl_db) is now running'
     print 'Started: ', datetime.datetime.now(), '\n'
 
     # Print info
@@ -540,7 +500,7 @@ if __name__ == '__main__':
     print 'Reference genome: ' + genome_build
 
     # Creating compressed output file
-    Nretrieved = run(ver, options, genome_build)
+    Nretrieved = process_data(options, genome_build, version)
     print '\nA total of ' + str(Nretrieved) + ' transcripts have been retrieved\n'
 
     # Indexing output file with Tabix
@@ -559,7 +519,5 @@ if __name__ == '__main__':
     print options.output + '.txt (list of transcripts)'
 
     print ''
-    print 'CAVA ensembl_prep successfully finished: ', datetime.datetime.now()
+    print 'CAVA ensembl_db successfully finished: ', datetime.datetime.now()
     print "---------------------------------------------------------------------------------------\n"
-
-#######################################################################################################################

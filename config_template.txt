@@ -1,5 +1,5 @@
 
-### This is a template of the configuration file for CAVA v1.2.2 ###
+### This is a template of the configuration file for CAVA v1.2.3 ###
 
 # Input file format
 # Possible values: VCF or TXT | Optional: yes | Default value: VCF

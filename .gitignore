@@ -1,0 +1,15 @@
+/env
+/.cache
+/.idea
+/bamgen/.cache
+/bamgen/.idea
+*.pyc
+*.swpc
+*/*.pyc
+*/*.swp
+*/*/*.swp
+/__pycache__
+/*/__pycache__
+/*/*/__pycache__
+/*/*/*/__pycache__
+doc/sphinx/_build

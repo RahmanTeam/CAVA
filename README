@@ -1,5 +1,5 @@
 
-CAVA v1.2.2 README
+CAVA v1.2.3 README
 ==================
 
 1 INTRODUCTION
@@ -21,27 +21,51 @@ Márton Münz, Elise Ruark, Anthony Renwick, Emma Ramsay, Matthew Clarke, Shazia
 3 DEPENDENCIES
 --------------
 
-CAVA v1.2.2 requires Python version 2.7.x (Python 3 is not supported).
+To install and run CAVA v1.2.3 you will need the following dependencies installed:
+- Python 2.7.9 or later (Python2 series)
+- GCC and GNU make
+- virtualenv
+
+If your system is missing GCC and GNU make, these can be installed as follows:
+
+On a Mac, the easiest way to set them up is to install Xcode Command Line Tools.
+
+On a Debian or Ubuntu Linux, they can be set up by installing the build-essential package:
+sudo apt-get install build-essential
+
+If not already installed on your system, virtualenv can be set up by:
+pip install virtualenv
 
 
-4 INSTALLATION
---------------
+4 INSTALLATION ON LINUX OR MAC
+------------------------------
 
-CAVA can be downloaded from www.icr.ac.uk/cava
+CAVA v1.2.3 can be downloaded from https://github.com/RahmanTeam/CAVA/releases/tag/v1.2.3
+in either .zip or .tar.gz format.
 
-After unpacking the tar.gz file, it can be installed with the following command:
+To unpack these run one of the following commands:
 
-./install.sh
+unzip CAVA-1.2.3.zip
 
-Once the installation script finished successfully, CAVA is ready for use.
+or:
 
- 
+tar -xvzf CAVA-1.2.3.tar.gz
+
+and then you can install CAVA with the following command from the CAVA-1.2.3 directory:
+
+./install.sh.
+
+CAVA uses virtualenv and pip to manage all its extra dependencies, which means that it will not clutter up your system by installing things globally. Everything it installs will go into a sub-directory in the CAVA-1.2.3 directory. If you delete CAVA then everything it has installed will also be deleted.
+
+Once the installation script has finished successfully, CAVA is ready for use.
+
+
 5 RUNNING CAVA
 --------------
 
 CAVA can be run with the following simple command:
 
-/path/to/cava/cava.py -c config.txt -i input.vcf -o output
+CAVA-1.2.3/cava -c config.txt -i input.vcf -o output
 
 It requires three command line arguments: 
 the name of the configuration file (-c), the name of the input file (-i) and the prefix of the output file name (-o). 
@@ -50,7 +74,7 @@ the name of the configuration file (-c), the name of the input file (-i) and the
 6 DOCUMENTATION
 ---------------
 
-See cava-v1.2_doc.pdf for detailed documentation and examples!
+See CAVA-v1.2,3_doc.pdf for detailed documentation and examples.
 
 
 7 LICENCE
