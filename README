@@ -53,7 +53,7 @@ tar -xvzf CAVA-1.2.3.tar.gz
 
 and then you can install CAVA with the following command from the CAVA-1.2.3 directory:
 
-./install.sh.
+./install.sh
 
 CAVA uses virtualenv and pip to manage all its extra dependencies, which means that it will not clutter up your system by installing things globally. Everything it installs will go into a sub-directory in the CAVA-1.2.3 directory. If you delete CAVA then everything it has installed will also be deleted.
 
